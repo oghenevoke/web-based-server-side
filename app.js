@@ -36,3 +36,9 @@ app.set(express.urlencoded({ extended: true }))
 /// setup cors middleware
 app.use(cors());
 app.use(bodyParser.json());
+
+app.use(function (req, res, next) {
+    // logger middleware outputs all incoming requests to server console
+    console.log("request: " + req.url);
+    next();
+});
