@@ -24,3 +24,15 @@ const dbURI = dbPprefix + dbUserName + ":" + dbPassword + dbUrl + dbParams;
 const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 const client = new MongoClient(dbURI, { serverApi: ServerApiVersion.v1 });
 let db = client.db(dbName);
+
+
+
+/// using express
+let app = express();
+app.set('json spaces', 3);
+app.set(express.json())
+app.set(express.urlencoded({ extended: true }))
+
+/// setup cors middleware
+app.use(cors());
+app.use(bodyParser.json());
