@@ -73,7 +73,7 @@ app.get('/collections/:collectionName/find/:searchQuery', function (req, res, ne
     let query = {};
     query = {
         $or: [
-            { topic: { $regex: searchText, $options: "i" } },
+            { subject: { $regex: searchText, $options: "i" } },
             { location: { $regex: searchText, $options: "i" } },
         ],
     };
