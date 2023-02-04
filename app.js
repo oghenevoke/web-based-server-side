@@ -44,7 +44,7 @@ app.use(function (req, res, next) {
 });
 
 
-/// get route
+/// GET route
 app.get('/collections/:collectionName', function (req, res, next) {
     req.collection.find({}).toArray(function (error, results) {
         if (error) {
@@ -54,7 +54,7 @@ app.get('/collections/:collectionName', function (req, res, next) {
     });
 });
 
-// post route to insert item to collection
+/// POST route to insert item to collection
 app.post('/collections/:collectionName', function(req, res, next){
     try{
         req.collection.insertOne(req.body, function(err, results){
@@ -66,6 +66,17 @@ app.post('/collections/:collectionName', function(req, res, next){
     }catch(e){
         next(e);
     }
+});
+
+// PUT route to update an item in a collection
+app.put('/collections/:collectionName/:id', function (req, res, next){
+    var id = req.params.id;
+    req.collection.updateOne({_id: new ObjectId(id)}, {$set: req.body}, function(err, results){
+        if(err){
+            return next(err);
+        }
+        res.send(results);
+    });
 });
 
 
