@@ -54,6 +54,20 @@ app.get('/collections/:collectionName', function (req, res, next) {
     });
 });
 
+// post route to insert item to collection
+app.post('/collections/:collectionName', function(req, res, next){
+    try{
+        req.collection.insertOne(req.body, function(err, results){
+            if(err){
+                return next(err);
+            }
+            res.send(results);
+        });
+    }catch(e){
+        next(e);
+    }
+});
+
 
 app.get("/", function (req, res) {
     res.send("Running");
