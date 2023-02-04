@@ -43,6 +43,18 @@ app.use(function (req, res, next) {
     next();
 });
 
+/// Images
+var publicImagePath = path.resolve(__dirname, 'public');
+app.use('/images', express.static(publicImagePath, {
+    fallthrough: false,
+}));
+/// custom error message for imates
+app.use(function (err, req, res, next) {
+    if (err.code === 'ENOENT') {
+        return res.status(404).send('Invalid Image URL');
+    }
+    next(err);
+});
 
 /// GET route
 app.get('/collections/:collectionName', function (req, res, next) {
@@ -54,25 +66,44 @@ app.get('/collections/:collectionName', function (req, res, next) {
     });
 });
 
+
+/// GET route to search through a collection
+app.get('/collections/:collectionName/find/:searchQuery', function (req, res, next) {
+    let searchText = req.params.searchQuery;
+    let query = {};
+    query = {
+        $or: [
+            { topic: { $regex: searchText, $options: "i" } },
+            { location: { $regex: searchText, $options: "i" } },
+        ],
+    };
+    req.collection.find(query, {}).toArray(function (err, results) {
+        if (err) {
+            return next(err);
+        }
+        res.send(results);
+    });
+});
+
 /// POST route to insert item to collection
-app.post('/collections/:collectionName', function(req, res, next){
-    try{
-        req.collection.insertOne(req.body, function(err, results){
-            if(err){
+app.post('/collections/:collectionName', function (req, res, next) {
+    try {
+        req.collection.insertOne(req.body, function (err, results) {
+            if (err) {
                 return next(err);
             }
             res.send(results);
         });
-    }catch(e){
+    } catch (e) {
         next(e);
     }
 });
 
 // PUT route to update an item in a collection
-app.put('/collections/:collectionName/:id', function (req, res, next){
+app.put('/collections/:collectionName/:id', function (req, res, next) {
     var id = req.params.id;
-    req.collection.updateOne({_id: new ObjectId(id)}, {$set: req.body}, function(err, results){
-        if(err){
+    req.collection.updateOne({ _id: new ObjectId(id) }, { $set: req.body }, function (err, results) {
+        if (err) {
             return next(err);
         }
         res.send(results);
@@ -81,7 +112,7 @@ app.put('/collections/:collectionName/:id', function (req, res, next){
 
 
 app.get("/", function (req, res) {
-    res.send("Running");
+    res.send("Welcome Yayyyyy!!!");
 });
 
 
