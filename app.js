@@ -42,3 +42,37 @@ app.use(function (req, res, next) {
     console.log("request: " + req.url);
     next();
 });
+
+
+/// get route
+app.get('/collections/:collectionName', function (req, res, next) {
+    req.collection.find({}).toArray(function (error, results) {
+        if (error) {
+            return next(error);
+        }
+        res.send(results);
+    });
+});
+
+
+app.get("/", function (req, res) {
+    res.send("Running");
+});
+
+
+app.param('collectionName'
+    , function (req, res, next, collectionName) {
+
+        req.collection = db.collection(collectionName);
+        return next();
+    });
+
+/// handles invalid request
+app.use(function (req, res) {
+    res.status(404).send("Not Found");
+});
+
+/// listening on port 4000
+app.listen(4000, function () {
+    console.log("port 4000");
+});
