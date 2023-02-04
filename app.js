@@ -44,7 +44,7 @@ app.use(function (req, res, next) {
 });
 
 /// Images
-var publicImagePath = path.resolve(__dirname, 'public');
+var publicImagePath = path.resolve(__dirname, 'public/images');
 app.use('/images', express.static(publicImagePath, {
     fallthrough: false,
 }));
