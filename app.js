@@ -128,7 +128,12 @@ app.use(function (req, res) {
     res.status(404).send("Not Found");
 });
 
-/// listening on port 4000
-app.listen(4000, function () {
-    console.log("port 4000");
+const port = process.env.PORT || 3000;
+app.listen(port, function () {
+  console.log("App started on port: " + port);
 });
+
+/// listening on port 4000
+/*app.listen(4000, function () {
+    console.log("port 4000");
+});*/
